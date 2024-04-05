@@ -18,16 +18,15 @@ model Student {
 }
 
 model Book {
-  id            String       @id @default(uuid())
-  title         String
-  author        String
-  year          Int
-  quantity      Int          @default(0)
-  createdAt     DateTime     @default(now())
-  category      Category?    @relation(fields: [category_id], references: [id])
-  category_id   String?
-  Transaction   Transaction? @relation(fields: [transactionId], references: [id])
-  transactionId String?
+  id          String        @id @default(uuid())
+  title       String
+  author      String
+  year        Int
+  quantity    Int           @default(0)
+  createdAt   DateTime      @default(now())
+  category    Category?     @relation(fields: [category_id], references: [id])
+  category_id String?
+  transaction Transaction[]
 }
 
 model Category {
@@ -39,9 +38,10 @@ model Category {
 model Transaction {
   id        String   @id @default(uuid())
   student   Student? @relation(fields: [studentId], references: [id])
-  book      Book[]
   createdAt DateTime @default(now())
   endAt     DateTime
   duration  Int
   studentId String?
+  book      Book?    @relation(fields: [bookId], references: [id])
+  bookId    String?
 }
