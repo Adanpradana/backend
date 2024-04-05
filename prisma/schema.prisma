@@ -8,22 +8,26 @@ datasource db {
 }
 
 model Student {
-  id         String   @id @default(uuid())
-  name       String
-  email      String   @unique
-  is_active  Boolean
-  created_at DateTime @default(now())
+  id          String        @id @default(uuid())
+  name        String
+  nim         String        @unique
+  email       String        @unique
+  is_active   Boolean
+  created_at  DateTime      @default(now())
+  Transaction Transaction[]
 }
 
 model Book {
-  id          String    @id @default(uuid())
-  title       String
-  author      String
-  year        Int
-  quantity    Int       @default(0)
-  createdAt   DateTime  @default(now())
-  category    Category? @relation(fields: [category_id], references: [id])
-  category_id String?
+  id            String       @id @default(uuid())
+  title         String
+  author        String
+  year          Int
+  quantity      Int          @default(0)
+  createdAt     DateTime     @default(now())
+  category      Category?    @relation(fields: [category_id], references: [id])
+  category_id   String?
+  Transaction   Transaction? @relation(fields: [transactionId], references: [id])
+  transactionId String?
 }
 
 model Category {
@@ -32,4 +36,12 @@ model Category {
   books         Book[]
 }
 
-
+model Transaction {
+  id        String   @id @default(uuid())
+  student   Student? @relation(fields: [studentId], references: [id])
+  book      Book[]
+  createdAt DateTime @default(now())
+  endAt     DateTime
+  duration  Int
+  studentId String?
+}

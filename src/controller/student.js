@@ -2,11 +2,12 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const createStudent = async (req, res) => {
-  const { name, email, is_active } = req.body;
+  const { name, nim, email, is_active } = req.body;
   try {
     const result = await prisma.student.create({
       data: {
         name,
+        nim,
         email,
         is_active,
       },
@@ -48,7 +49,7 @@ const getStudentById = async (req, res) => {
 };
 const updateStudent = async (req, res) => {
   const { id } = req.params;
-  const { name, email, is_active } = req.body;
+  const { name, nim, email, is_active } = req.body;
   try {
     const result = await prisma.student.update({
       where: {
@@ -56,6 +57,7 @@ const updateStudent = async (req, res) => {
       },
       data: {
         name,
+        nim,
         email,
         is_active,
       },
