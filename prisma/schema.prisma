@@ -10,23 +10,22 @@ datasource db {
 model Student {
   id          String        @id @default(uuid())
   name        String
-  nim         String        @unique
   email       String        @unique
   is_active   Boolean
   created_at  DateTime      @default(now())
+  nim         String        @unique
   Transaction Transaction[]
 }
 
 model Book {
-  id          String        @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   author      String
   year        Int
-  quantity    Int           @default(0)
-  createdAt   DateTime      @default(now())
-  category    Category?     @relation(fields: [category_id], references: [id])
+  quantity    Int       @default(0)
+  createdAt   DateTime  @default(now())
   category_id String?
-  transaction Transaction[]
+  category    Category? @relation(fields: [category_id], references: [id])
 }
 
 model Category {
@@ -37,12 +36,11 @@ model Category {
 
 model Transaction {
   id             String   @id @default(uuid())
-  student        Student? @relation(fields: [student_id], references: [id])
   createdAt      DateTime @default(now())
   endAt          DateTime
   duration       Int?
-  is_return_book Boolean  @default(false)
   student_id     String?
-  book           Book?    @relation(fields: [book_id], references: [id])
-  book_id        String?
+  is_return_book Boolean  @default(false)
+  book_id        String[]
+  student        Student? @relation(fields: [student_id], references: [id])
 }
