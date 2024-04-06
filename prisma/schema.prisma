@@ -18,14 +18,16 @@ model Student {
 }
 
 model Book {
-  id          String    @id @default(uuid())
-  title       String
-  author      String
-  year        Int
-  quantity    Int       @default(0)
-  createdAt   DateTime  @default(now())
-  category_id String?
-  category    Category? @relation(fields: [category_id], references: [id])
+  id             String       @id @default(uuid())
+  title          String
+  author         String
+  year           Int
+  quantity       Int          @default(0)
+  createdAt      DateTime     @default(now())
+  category_id    String?
+  transaction_id String?
+  category       Category?    @relation(fields: [category_id], references: [id])
+  Transaction    Transaction? @relation(fields: [transaction_id], references: [id])
 }
 
 model Category {
@@ -42,5 +44,6 @@ model Transaction {
   student_id     String?
   is_return_book Boolean  @default(false)
   book_id        String[]
+  book           Book[]
   student        Student? @relation(fields: [student_id], references: [id])
 }

@@ -38,37 +38,52 @@ const createTransaction = async (req, res) => {
         duration: 10,
       },
     });
-    await Promise.all(
-      getBookData.map((book) =>
-        prisma.book.update({
-          where: { id: book.id },
-          data: { quantity: book.quantity - 1 },
-        })
-      )
-    );
-    // if (response) {
-    //   await prisma.book.update({
-    //     where: {
-    //       id: book_id,
-    //     },
-    //     data: {
-    //       quantity: bookQuantity - 1,
-    //     },
-    //   });
-    //   console.log(duration, "DURATION");
-    //   console.log(endDate, "DURATION");
-    //   console.log(currentDate, "DURATION");
-    // }
-    res.status(200).json({ msg: "transaction success", data: response });
+    if (response) {
+      await Promise.all(
+        getBookData.map((book) =>
+          prisma.book.update({
+            where: { id: book.id },
+            data: { quantity: book.quantity - 1 },
+          })
+        )
+      );
+
+      res.status(200).json({ msg: "transaction success", data: response });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
 const getTransaction = async (req, res) => {
-  const result = await prisma.transaction.findMany();
-  res.status(200).json({ msg: "succecss", data: result });
+  try {
+    const transactions = await prisma.transaction.findMany({
+      include: {
+        student: true,
+      },
+    });
+    const bookIds = transactions.flatMap((transaction) => transaction.book_id);
+
+    const books = await prisma.book.findMany({
+      where: {
+        id: {
+          in: bookIds,
+        },
+      },
+    });
+
+    const transactionsWithBooks = transactions.map((transaction) => ({
+      ...transaction,
+      books: books.filter((book) => transaction.book_id.includes(book.id)),
+    }));
+
+    res.status(200).json({ msg: "success", data: transactionsWithBooks });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
 };
+
 const getTransactionById = async (req, res) => {};
 const updateTransaction = async (req, res) => {};
 const deleteTransaction = async (req, res) => {};
