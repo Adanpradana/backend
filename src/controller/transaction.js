@@ -3,8 +3,14 @@ const prisma = new PrismaClient();
 
 const createTransaction = async (req, res) => {
   const { student_id, endAt, book_id } = req.body;
+  const durationDays = 14;
   try {
-    const result = await prisma.transaction.create({});
+    const result = await prisma.transaction.create({
+      student_id,
+      book_id,
+      endAt,
+      duration,
+    });
   } catch (error) {
     console.log(error);
   }
