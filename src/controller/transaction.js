@@ -2,10 +2,9 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const createTransaction = async (req, res) => {
+  const { student_id, endAt, book_id } = req.body;
   try {
-    const result = await prisma.transaction.create({
-        
-    })
+    const result = await prisma.transaction.create({});
   } catch (error) {
     console.log(error);
   }
