@@ -36,12 +36,12 @@ model Category {
 }
 
 model Transaction {
-  id        String   @id @default(uuid())
-  student   Student? @relation(fields: [studentId], references: [id])
-  createdAt DateTime @default(now())
-  endAt     DateTime
-  duration  Int
-  studentId String?
-  book      Book?    @relation(fields: [bookId], references: [id])
-  bookId    String?
+  id         String   @id @default(uuid())
+  student    Student? @relation(fields: [student_id], references: [id])
+  createdAt  DateTime @default(now())
+  endAt      DateTime
+  duration   Int
+  student_id String?
+  book       Book?    @relation(fields: [book_id], references: [id])
+  book_id    String?
 }
