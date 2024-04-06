@@ -3,10 +3,14 @@ const prisma = new PrismaClient();
 const dayjs = require("dayjs");
 
 const createTransaction = async (req, res) => {
-  const { student_id, endAt, book_id } = req.body;
-  const endDate = dayjs(endAt, "DD-MM-YYYY HH:mm");
-  const currentDate = dayjs();
-  const duration = Math.floor(endDate.diff(currentDate, "hour") / 24);
+  const { student_id, date, book_id } = req.body;
+  const date1 = dayjs();
+  const date2 = dayjs(date, "DD-MM-YYYY HH:mm");
+
+  console.log(date1.format("DD-MM-YYYY HH:mm"));
+  console.log(date2.format("DD-MM-YYYY HH:mm"));
+  const duration = date2.diff(date1, "day");
+
   try {
     const getStudentData = await prisma.student.findUnique({
       where: {
@@ -35,7 +39,7 @@ const createTransaction = async (req, res) => {
         student_id,
         book_id,
         endAt: endDate,
-        duration: 10,
+        duration,
       },
     });
     if (response) {
