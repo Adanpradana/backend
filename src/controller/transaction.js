@@ -12,6 +12,11 @@ const createTransaction = async (req, res) => {
   const duration = date2.diff(date1, "day");
 
   try {
+    if (duration > 14) {
+      res
+        .status(401)
+        .json({ msg: "transaction failed, maximum rental is 14 day" });
+    }
     const getStudentData = await prisma.student.findUnique({
       where: {
         id: student_id,
@@ -38,7 +43,7 @@ const createTransaction = async (req, res) => {
       data: {
         student_id,
         book_id,
-        endAt: endDate,
+        endAt: date2,
         duration,
       },
     });
@@ -58,6 +63,7 @@ const createTransaction = async (req, res) => {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
+  ``;
 };
 const getTransaction = async (req, res) => {
   try {
