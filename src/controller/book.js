@@ -21,7 +21,11 @@ const createBook = async (req, res) => {
 };
 const getBook = async (req, res) => {
   try {
-    const result = await prisma.book.findMany();
+    const result = await prisma.book.findMany({
+      include: {
+        category: true,
+      },
+    });
     res.status(200).json({
       message: "success get book lists",
       data: result,

@@ -46,4 +46,29 @@ const getRefCategory = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
-module.exports = { createCategory, getCategory, getRefCategory };
+const getRefCategoryId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const createCategory = await prisma.category.findUnique({
+      include: {
+        books: true,
+      },
+      where: {
+        id,
+      },
+    });
+    res.status(200).json({
+      message: "success get category list",
+      data: createCategory,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: error.message });
+  }
+};
+module.exports = {
+  createCategory,
+  getCategory,
+  getRefCategory,
+  getRefCategoryId,
+};
